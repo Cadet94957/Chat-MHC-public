@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update MHCO content — Chat MHC</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="helper">
+  <main class="helper-page">
+    <p><a href="/">&larr; Back to Chat MHC</a></p>
+    <h1>Update MHCO content</h1>
+    <p>mhco.org blocks automated access from Chat MHC's servers, so new MHCO
+       articles and the associate members list come in through
+       <strong>your own browser</strong>: a bookmark button reads them while
+       you're logged in to mhco.org, saves them as a file, and you drop that
+       file into GitHub. Oregon laws still update on their own every month.</p>
+
+    <h2>One-time setup (Chrome or Edge)</h2>
+    <ol>
+      <li>Show your bookmarks bar: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>
+          (on a Mac: <kbd>&#8984;</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>).</li>
+      <li>Drag this button onto the bookmarks bar:
+          <a id="bookmarklet" class="bookmarklet" href="#">Grab MHCO updates</a>
+          <p id="bookmarklet-error" class="error hidden">The button couldn't be
+             prepared — reload this page and try again.</p></li>
+    </ol>
+
+    <h2>Each time you want to update</h2>
+    <ol>
+      <li>Go to <a href="https://mhco.org/user/login" target="_blank"
+          rel="noopener">mhco.org</a> and log in.</li>
+      <li>Click <strong>Grab MHCO updates</strong> in your bookmarks bar and
+          choose <strong>Newest</strong> (about 2 minutes). Choose
+          <strong>Everything</strong> once in a while (about 15 minutes) to pick
+          up edited or removed articles. Keep the tab open while it works.</li>
+      <li>When it says <strong>Saved!</strong>, click
+          <strong>Open upload page</strong>, drag the downloaded
+          <code>mhco-export-….json.gz</code> file into it, and click
+          <strong>Commit changes</strong>.</li>
+      <li>Done. Chat MHC updates itself in about 5 minutes. To watch, open the
+          repository's <strong>Actions</strong> tab on GitHub; the run's
+          summary lists what was added.</li>
+    </ol>
+
+    <h2>If something goes wrong</h2>
+    <ul>
+      <li><strong>Clicking the bookmark does nothing:</strong> make sure you're
+          on an mhco.org page, then click it once more. If you dragged it
+          before this page was updated, drag the new button again.</li>
+      <li><strong>"mhco.org asked us to slow down":</strong> it waits and
+          retries by itself. If it stops early, upload the file anyway;
+          whatever it got is used and nothing is lost.</li>
+      <li><strong>Nothing changed in Chat MHC:</strong> there may simply be no
+          new articles. The GitHub run's summary says what happened.</li>
+      <li><strong>Upload only the file you just saved.</strong> A file older
+          than one already uploaded is skipped, so it can't undo newer
+          content.</li>
+      <li><strong>Not logged in?</strong> The file then only adds new articles;
+          log in and grab again to refresh or tidy up existing ones.</li>
+    </ul>
+  </main>
+  <script src="/mhco-helper.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+services:
+  chatmhc:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - chatmhc-data:/srv/chatmhc/data
+    restart: unless-stopped
+
+volumes:
+  chatmhc-data:

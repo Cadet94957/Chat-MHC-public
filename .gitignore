@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+data/
+*.db
+*.log
+.pytest_cache/
+.venv/
+venv/
+
+# Public copy: MHCO content is members-only and licensed, so the knowledge-base
+# snapshot and form PDFs are never committed here.
+kb/
+forms_library/*.pdf
+mhco_imports/*.json.gz
+

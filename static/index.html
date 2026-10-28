@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat MHC — Oregon Mobile Home Park Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Login overlay -->
+  <div id="login-overlay" class="hidden">
+    <form id="login-form" class="login-card">
+      <h1>Chat <span>MHC</span></h1>
+      <p class="muted">Oregon Mobile Home Park Assistant</p>
+      <input id="login-user" type="text" placeholder="Username" autocomplete="username" required>
+      <input id="login-pass" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button type="submit">Sign in</button>
+      <p id="login-error" class="error hidden"></p>
+    </form>
+  </div>
+
+  <div id="app" class="hidden">
+    <aside id="sidebar">
+      <div class="brand">Chat <span>MHC</span></div>
+      <button id="new-chat" class="primary">+ New chat</button>
+      <nav id="chat-list"></nav>
+      <div class="sidebar-footer">
+        <div id="kb-status" class="muted small"></div>
+        <a href="/mhco-helper.html" class="small">Update MHCO content</a>
+        <button id="logout" class="ghost small">Sign out</button>
+      </div>
+    </aside>
+
+    <main id="main">
+      <header id="tabs">
+        <button class="tab active" data-view="chat">Chat</button>
+        <button class="tab" data-view="forms">Forms</button>
+        <button class="tab" data-view="laws">Oregon Laws</button>
+      </header>
+
+      <!-- Chat view -->
+      <section id="view-chat" class="view">
+        <div id="messages">
+          <div id="welcome">
+            <h2>Welcome to Chat MHC</h2>
+            <p>Ask anything about managing your Oregon manufactured home community —
+               rent increases, rule violations, notices, screening, sales, and MHCO forms.</p>
+            <div class="suggestions">
+              <button class="suggestion">How much notice do I need to give for a rent increase?</button>
+              <button class="suggestion">A resident keeps violating community rules — what are my options?</button>
+              <button class="suggestion">What form do I use for nonpayment of rent?</button>
+              <button class="suggestion">A tenant wants to sell their home in place. What's the process?</button>
+            </div>
+          </div>
+        </div>
+        <form id="composer">
+          <textarea id="input" rows="1" placeholder="Ask about Oregon park management, laws, or MHCO forms…"></textarea>
+          <button id="send" type="submit" class="primary">Send</button>
+        </form>
+        <p class="disclaimer">General regulatory information, not legal advice. Verify current statutes or consult counsel for disputes.</p>
+      </section>
+
+      <!-- Forms view -->
+      <section id="view-forms" class="view hidden">
+        <div class="view-head">
+          <h2>MHCO Forms</h2>
+          <input id="forms-filter" type="search" placeholder="Filter forms…">
+        </div>
+        <div id="forms-list" class="cards"></div>
+      </section>
+
+      <!-- Laws view -->
+      <section id="view-laws" class="view hidden">
+        <div class="view-head">
+          <h2>Oregon Laws (ORS 90 &amp; 91)</h2>
+          <input id="laws-filter" type="search" placeholder="Search statutes…">
+        </div>
+        <div id="laws-list" class="cards"></div>
+      </section>
+    </main>
+
+    <aside id="sources-panel" class="hidden">
+      <div class="view-head"><h3>Sources</h3><button id="close-sources" class="ghost">×</button></div>
+      <div id="sources-list"></div>
+    </aside>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

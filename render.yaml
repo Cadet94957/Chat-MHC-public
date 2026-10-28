@@ -1,0 +1,20 @@
+# Render.com blueprint — connect the repo and Render builds from the Dockerfile.
+# Free tier: no persistent disk (the knowledge base is baked into the deploy via
+# the committed kb/ snapshot, refreshed by the GitHub "Update knowledge base"
+# workflow). Free instances sleep after ~15 min idle and wake on the next visit.
+services:
+  - type: web
+    name: chat-mhc
+    runtime: docker
+    plan: free
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: MODEL_NAME
+        value: claude-sonnet-5-5
+      - key: CHATBOT_USERNAME
+        sync: false
+      - key: CHATBOT_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true

@@ -1,0 +1,14 @@
+fastapi>=0.115
+uvicorn[standard]>=0.32
+anthropic>=0.92
+requests>=2.32
+beautifulsoup4>=4.12
+pypdf>=5.0
+itsdangerous>=2.2
+python-dotenv>=1.0
+# Security floors for transitive dependencies:
+starlette>=0.40   # CVE-2024-47874 (multipart DoS) fixed in 0.40.0
+h11>=0.16         # CVE-2025-43859 (request smuggling) fixed in 0.16.0
+# Test dependencies
+pytest>=8.0
+httpx>=0.27
