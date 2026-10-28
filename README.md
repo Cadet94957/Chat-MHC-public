@@ -88,7 +88,6 @@ with no specialized infrastructure needed.
 
 | If you want to… | Read |
 |---|---|
-| Put Chat MHC online for your team (no coding, ~30–40 minutes) | [SETUP-GUIDE.md](SETUP-GUIDE.md) |
 | Run it locally, change the code, or understand the content pipeline | [DEVELOPMENT.md](DEVELOPMENT.md) |
 | Review security, privacy, and data handling | [SECURITY.md](SECURITY.md) |
 

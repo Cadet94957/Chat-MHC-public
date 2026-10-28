@@ -1,8 +1,7 @@
 # Chat MHC — Developer Guide
 
 Technical reference for running, extending, and operating Chat MHC. For a
-product overview see the [README](README.md); for a no-code deployment
-walkthrough see [SETUP-GUIDE.md](SETUP-GUIDE.md).
+product overview see the [README](README.md).
 
 > **Public copy.** This repository omits the members-only MHCO content that the
 > private deployment carries: the `kb/` snapshot, the form PDFs in
@@ -20,8 +19,7 @@ walkthrough see [SETUP-GUIDE.md](SETUP-GUIDE.md).
 - **LLM** — Anthropic Claude (`claude-sonnet-5-5` by default), streamed to the
   browser over SSE. Without an API key the app still runs and returns raw
   retrieval results so the pipeline is testable.
-- **Auth** — single shared login (`CHATBOT_USERNAME` / `CHATBOT_PASSWORD`)
-  with a signed session cookie. All API routes and PDF downloads require it.
+- **Auth** — single shared login with a signed session cookie. All API routes and PDF downloads require it.
 - **Frontend** — dependency-free single-page app: streaming chat with source
   citations, chat history, an MHCO Forms browser with real PDF downloads, and
   an ORS 90/91 statute browser.
@@ -38,13 +36,11 @@ data/     runtime: chatmhc.db + cached form PDFs   (created automatically)
 ## Quick start
 
 ```bash
-cp .env.example .env        # fill in keys & passwords
 pip install -r requirements.txt
 uvicorn app.main:app --port 8000
 ```
 
-Open http://localhost:8000 and sign in with `CHATBOT_USERNAME` /
-`CHATBOT_PASSWORD`. On first start the knowledge base is empty, so a small
+Open http://localhost:8000. On first start the knowledge base is empty, so a small
 seed dataset (condensed ORS 90 summaries + sample guidance + form index) is
 loaded automatically — replace it with real data below.
 
@@ -74,7 +70,7 @@ knowledge base is **baked into the deploy** as a committed snapshot:
 
 ## Loading real MHCO content
 
-**Option A — refresh from the web** (MHCO member credentials in `.env`):
+**Option A — refresh from the web** (requires an MHCO membership):
 
 ```bash
 python -m ingest restore-snapshot       # start from the published kb/ content
@@ -130,52 +126,6 @@ python -m ingest stats
 python -m ingest export-snapshot   # writes kb/ ; commit it to deploy the content
 ```
 
-### Automatic updates
-
-`.github/workflows/update-knowledge-base.yml` keeps the deployed content fresh
-without any server-side cron or shell access:
-
-- Runs **monthly** (1st of the month, 09:00 UTC), **whenever a bookmark export is
-  uploaded to `mhco_imports/`** on `main`, and **on demand** (Actions tab →
-  *Update knowledge base* → *Run workflow*; set *full* to `true` to re-read
-  every article).
-- Starts from the published `kb/` content, refreshes the laws from
-  oregonlegislature.gov, tries mhco.org directly (using `MHCO_USERNAME` /
-  `MHCO_PASSWORD` from the repo's **Actions secrets**) in case its block on
-  GitHub is ever lifted, imports any uploaded bookmark exports, then runs
-  `export-snapshot` and commits `kb/` only if the content changed. Each run's
-  summary page shows a table of what was refreshed.
-- If mhco.org blocks the run, that's noted in the summary and its content is
-  kept; it doesn't fail the run. The run is marked failed only when the laws
-  couldn't be refreshed or an uploaded file couldn't be read. Either way,
-  existing content is kept, and `export-snapshot` refuses to publish if
-  articles or laws shrank by more than half.
-- Render auto-deploys the new commit, so the live site updates within minutes.
-- Safe on failure: mhco.org rate-limits crawlers, so the scrape stops at its
-  first sustained 429 and keeps any content it couldn't refresh. That's shown
-  in the run's summary and the run stays green; it turns red only when the
-  laws couldn't be refreshed, an uploaded file couldn't be used, or
-  `export-snapshot` refused to publish. The live content is unchanged either
-  way.
-
-The schedule trigger only runs on the default branch (`main`); the manual
-button works on any branch.
-
-## Configuration
-
-| Variable | Purpose |
-|---|---|
-| `ANTHROPIC_API_KEY` | Claude API key — required for AI answers |
-| `MODEL_NAME` | Claude model id (default `claude-sonnet-5-5`) |
-| `CHATBOT_USERNAME` / `CHATBOT_PASSWORD` | shared app login |
-| `SESSION_SECRET` | long random string for session cookies (`openssl rand -base64 48`) |
-| `COOKIE_SECURE` | `true` (default) marks session cookies HTTPS-only; set `false` only for local http dev |
-| `MHCO_USERNAME` / `MHCO_PASSWORD` | mhco.org member login for the scraper |
-| `DATA_DIR` | data directory (default `./data`) |
-
-The app refuses to start while `CHATBOT_PASSWORD` / `SESSION_SECRET` still
-contain the `.env.example` placeholder values.
-
 ## Tests
 
 ```bash
@@ -190,10 +140,6 @@ handling with the Anthropic API, and the July 2026 audit summary).
 
 Notes:
 
-- `.env` is gitignored and this repository's history contains no committed
-  secrets. If credentials from the *predecessor* ChatMHC project (Groq/OpenAI/
-  LangChain keys, MHCO password) were ever committed elsewhere, make sure they
-  have been rotated.
 - The app intentionally gates everything (including form PDFs) behind login
   because MHCO content is members-only. Never commit MHCO form PDFs or
   articles to this public repository.

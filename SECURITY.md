@@ -51,8 +51,8 @@ the browser.
 
 *Design note:* the app uses a single shared login by design (one operator
 credential for a small trusted team). There are no per-user accounts, so all
-chats are visible to anyone holding the credential. Rotating either the
-password or `SESSION_SECRET` immediately invalidates access/sessions.
+chats are visible to anyone holding the credential. Changing the password or
+the session-signing key immediately invalidates access/sessions.
 
 ## 3. Transport security
 
@@ -140,10 +140,8 @@ copy of the source; any repository that holds them must be private.
 - **Automation hygiene:** the knowledge-base refresh workflow passes inputs via
   environment variables (no shell interpolation of user-controlled values) and
   scraper credentials live only in GitHub Actions secrets.
-- **Secrets:** all secrets (AI API key, login credentials, session secret,
-  scraper credentials) are supplied via environment variables; `.env` is
-  git-ignored, and this repository's history contains no committed secrets
-  (verified during the audit).
+- **Secrets:** all secrets are supplied by the host at run time, never stored
+  in the code, and this repository's history contains no committed secrets.
 
 ## 7. Audit summary — July 2026
 
@@ -180,11 +178,11 @@ fresh history.)
 These are properties of the current design that operators should be aware of:
 
 - **Shared login:** one credential for all users means no per-user audit trail
-  and no per-user revocation. Rotate `CHATBOT_PASSWORD` when someone leaves the
-  team; rotate `SESSION_SECRET` to force all sessions to re-authenticate.
+  and no per-user revocation. Change the shared password when someone leaves
+  the team; change the session-signing key to force everyone to sign in again.
 - **Logout is client-side:** logging out deletes the cookie but does not revoke
   it server-side (it remains valid until its 14-day expiry on a device that
-  kept a copy). Rotating `SESSION_SECRET` revokes everything immediately.
+  kept a copy). Changing the session-signing key revokes everything immediately.
 - **Encryption at rest** relies on the hosting platform's disk encryption; the
   SQLite file itself is not application-encrypted. Prefer hosts with encrypted
   disks (Render's disks are encrypted at rest).
